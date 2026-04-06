@@ -1,0 +1,137 @@
+---
+title: "Influenza Clade Explorer"
+author: "Elgin Akin"
+format:
+  html:
+    page-layout: custom
+    toc: false
+    css: styles.css
+    include-in-header:
+      text: |
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+---
+
+::: {.app-container}
+
+::: {.sidebar}
+::: {.sidebar-header}
+## Influenza Clade Nomenclature Explorer
+- Author: [Elgin Akin](https://elginakin.github.io)
+- Data Source:  [Influenza Clade Nomenclature](https://github.com/influenza-clade-nomenclature) 
+Currently Only HA Subclade Nomenclature is supported. 
+:::
+
+::: {.sidebar-section}
+### Lineage
+<select id="lineage-select" class="form-control">
+<option value="H3N2">H3N2</option>
+<option value="H1N1">H1N1pdm</option>
+<option value="Victoria">B/Victoria</option>
+</select>
+:::
+
+::: {.sidebar-section}
+### Filter
+<select id="clade-filter" class="form-control">
+<option value="">All clades</option>
+</select>
+:::
+
+::: {.sidebar-section}
+### Search
+<input type="text" id="search-input" class="form-control" placeholder="e.g., C.3">
+<div id="search-results" class="search-results"></div>
+:::
+
+::: {.sidebar-section}
+### Display Options
+<label class="checkbox-label">
+<input type="checkbox" id="show-labels" checked> Show labels
+</label>
+<label class="checkbox-label">
+<input type="checkbox" id="show-legend"> Show color legend
+</label>
+<label class="checkbox-label">
+<input type="checkbox" id="show-table"> Show data table
+</label>
+:::
+
+::: {.sidebar-section}
+<div id="stats-box" class="stats-box">
+<span id="node-count">Loading...</span>
+</div>
+<button id="refresh-data" class="btn-refresh">🔄 Refresh Data</button>
+:::
+
+:::
+
+::: {.main-content}
+::: {.main-header}
+# [Influenza H3N2 Clade Hierarchy]{#main-title}
+:::
+
+<div id="color-legend" class="color-legend"></div>
+
+::: {.content-area}
+
+::: {.viz-panel}
+::: {.viz-container #viz-container}
+<div id="loading" class="loading">
+<div class="spinner"></div>
+<p>Loading clade data...</p>
+</div>
+<svg id="tree-svg"></svg>
+:::
+:::
+
+::: {.inspector-panel #inspector-panel}
+::: {.inspector-header}
+### 🔍 Clade Inspector
+:::
+::: {.inspector-content #inspector-content}
+<div class="inspector-placeholder">
+<p>Click on a clade node to view details</p>
+</div>
+:::
+:::
+
+:::
+
+::: {.table-panel #table-panel}
+::: {.table-header}
+<h3>📊 Clade Data Table</h3>
+<div class="table-actions">
+<input type="text" id="table-search" class="form-control table-search" placeholder="Filter table...">
+<button id="download-csv" class="btn-download">Download CSV</button>
+</div>
+:::
+::: {.table-container}
+<table id="data-table" class="data-table">
+<thead>
+<tr>
+<th data-sort="clade">Clade ↕</th>
+<th data-sort="parent">Parent ↕</th>
+<th data-sort="alias">Alias ↕</th>
+<th data-sort="mutations">Defining Mutations</th>
+<th data-sort="mutCount"># Mut ↕</th>
+<th data-sort="repCount"># Rep ↕</th>
+</tr>
+</thead>
+<tbody id="table-body">
+</tbody>
+</table>
+:::
+:::
+
+:::
+
+:::
+
+<div id="tooltip" class="tooltip"></div>
+
+::: {.app-footer}
+Influenza Clade Nomenclature is sourced from the [Influenza Clade Nomenclature](https://github.com/influenza-clade-nomenclature) Github Repository| Built with Quarto & D3.js
+:::
+
+```{=html}
+<script type="module" src="clade-tree.js"></script>
