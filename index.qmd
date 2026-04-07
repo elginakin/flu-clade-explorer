@@ -1,5 +1,5 @@
 ---
-title: "Influenza Clade Explorer"
+title: "(alpha) Influenza Clade Explorer"
 author: "Elgin Akin"
 format:
   html:
@@ -14,11 +14,30 @@ format:
 ::: {.app-container}
 
 ::: {.sidebar}
+
 ::: {.sidebar-header}
 ## Influenza Clade Nomenclature Explorer
-- Author: [Elgin Akin](https://elginakin.github.io)
-- Data Source:  [Influenza Clade Nomenclature](https://github.com/influenza-clade-nomenclature) 
-Currently Only HA Subclade Nomenclature is supported. 
+
+<span class="alpha-badge">ALPHA</span>
+
+**Author:** [Elgin Akin](https://elginakin.github.io)
+
+**Data Source:** [Influenza Clade Nomenclature](https://github.com/influenza-clade-nomenclature)
+
+<div class="info-note">
+Currently only HA subclade nomenclature is supported.
+</div>
+:::
+
+::: {.help-section}
+<button id="help-button" class="help-button-sidebar">
+  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="10"></circle>
+    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+  </svg>
+  Help & Instructions
+</button>
 :::
 
 ::: {.sidebar-section}
@@ -57,6 +76,39 @@ Currently Only HA Subclade Nomenclature is supported.
 :::
 
 ::: {.sidebar-section}
+### Appearance
+<label>
+Label Size: <span id="label-size-value" class="slider-value">11px</span>
+</label>
+<input type="range" id="label-size" min="8" max="30" value="11" step="1">
+
+<label style="margin-top: 8px; display: block;">
+Edge Length: <span id="edge-length-value" class="slider-value">80px</span>
+</label>
+<input type="range" id="edge-length" min="40" max="150" value="80" step="5">
+
+<label style="margin-top: 8px; display: block;">
+Vertical Spacing: <span id="vertical-spacing-value" class="slider-value">20px</span>
+</label>
+<input type="range" id="vertical-spacing" min="12" max="150" value="20" step="1">
+
+<label style="margin-top: 8px; display: block;">
+Node Size: <span id="node-size-value" class="slider-value">5px</span>
+</label>
+<input type="range" id="node-size" min="3" max="20" value="5" step="1">
+
+<label style="margin-top: 8px; display: block;">
+Mutation Font: <span id="mutation-font-value" class="slider-value">7px</span>
+</label>
+<input type="range" id="mutation-font" min="5" max="30" value="7" step="0.5">
+:::
+
+::: {.sidebar-section}
+### Selection
+<button id="clear-selection" class="btn-clear" disabled>Clear Selection</button>
+:::
+
+::: {.sidebar-section}
 <div id="stats-box" class="stats-box">
 <span id="node-count">Loading...</span>
 </div>
@@ -64,8 +116,10 @@ Currently Only HA Subclade Nomenclature is supported.
 :::
 
 :::
+<!-- END .sidebar -->
 
 ::: {.main-content}
+
 ::: {.main-header}
 # [Influenza H3N2 Clade Hierarchy]{#main-title}
 :::
@@ -83,6 +137,7 @@ Currently Only HA Subclade Nomenclature is supported.
 <svg id="tree-svg"></svg>
 :::
 :::
+<!-- END .viz-panel -->
 
 ::: {.inspector-panel #inspector-panel}
 ::: {.inspector-header}
@@ -91,11 +146,14 @@ Currently Only HA Subclade Nomenclature is supported.
 ::: {.inspector-content #inspector-content}
 <div class="inspector-placeholder">
 <p>Click on a clade node to view details</p>
+<p class="hint">Hold Ctrl/Cmd to select multiple clades</p>
 </div>
 :::
 :::
+<!-- END .inspector-panel -->
 
 :::
+<!-- END .content-area -->
 
 ::: {.table-panel #table-panel}
 ::: {.table-header}
@@ -122,16 +180,83 @@ Currently Only HA Subclade Nomenclature is supported.
 </table>
 :::
 :::
+<!-- END .table-panel -->
 
 :::
+<!-- END .main-content -->
 
 :::
+<!-- END .app-container -->
+
+```{=html}
+<div id="help-overlay" class="help-overlay">
+  <div class="help-modal">
+    <button id="close-help" class="close-help">&times;</button>
+    
+    <div class="help-content">
+      <h2>Data</h2>
+      <div class="help-section info-box">
+        <h3>📊 Data Source</h3>
+        <p>This tool visualizes influenza clade nomenclature from the <a href="https://github.com/influenza-clade-nomenclature" target="_blank">Influenza Clade Nomenclature</a> GitHub repository.</p>
+        <p><strong>Current Status:</strong> Only HA subclade nomenclature is supported (H3N2, H1N1pdm, B/Victoria).</p>
+        <p><strong>Updates:</strong> Data is fetched from GitHub on each session. Use the "Refresh Data" button to get the latest nomenclature.</p>
+      </div>
+
+    <div class="help-content">
+      <h2>How to Use</h2>
+      
+      <div class="help-section">
+        <h3>Navigation</h3>
+        <ul>
+          <li><strong>Click nodes</strong> to view clade details in the inspector panel</li>
+          <li><strong>Ctrl/Cmd + Click</strong> to select multiple clades</li>
+          <li><strong>Scroll or drag</strong> to pan around the tree</li>
+          <li><strong>Scroll wheel</strong> to zoom in/out</li>
+        </ul>
+      </div>
+      
+      <div class="help-section">
+        <h3>Customization</h3>
+        <ul>
+          <li><strong>Label Size:</strong> Adjust text size for clade names</li>
+          <li><strong>Edge Length:</strong> Control horizontal spacing between nodes</li>
+          <li><strong>Vertical Spacing:</strong> Adjust spacing between clades (increase to prevent overlap)</li>
+          <li><strong>Mutation Font:</strong> Change size of mutation labels on edges</li>
+        </ul>
+      </div>
+      
+      <div class="help-section">
+        <h3>Search & Filter</h3>
+        <ul>
+          <li><strong>Search:</strong> Type a clade name (e.g., "C.3") to highlight it</li>
+          <li><strong>Filter:</strong> Show only descendants of a specific clade</li>
+          <li><strong>Table:</strong> Enable to see sortable, filterable data</li>
+        </ul>
+      </div>
+      
+
+      
+      <div class="help-section">
+        <h3>💡 Tips</h3>
+        <ul>
+          <li>Increase <strong>Vertical Spacing</strong> to 40-50px if mutation labels overlap</li>
+          <li>Use the <strong>Clear Selection</strong> button to deselect all nodes</li>
+          <li>Download the data table as CSV for further analysis</li>
+          <li>The color legend shows major clade groups</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+```
 
 <div id="tooltip" class="tooltip"></div>
 
 ::: {.app-footer}
-Influenza Clade Nomenclature is sourced from the [Influenza Clade Nomenclature](https://github.com/influenza-clade-nomenclature) Github Repository| Built with Quarto & D3.js
+<span class="version-badge">v1.0.0</span> | Clade assignments sourced from the [Influenza Clade Nomenclature](https://github.com/influenza-clade-nomenclature) Github Repository | Built with Quarto & D3.js 
 :::
 
 ```{=html}
 <script type="module" src="clade-tree.js"></script>
+```

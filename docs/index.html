@@ -8,7 +8,7 @@
 
 <meta name="author" content="Elgin Akin">
 
-<title>Influenza Clade Explorer – Influenza (sub)clade nomenclature</title>
+<title>(alpha) Influenza Clade Explorer – Influenza (sub)clade nomenclature</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -35,7 +35,7 @@ ul.task-list li input[type="checkbox"] {
 
 
 <header id="title-block-header">
-<h1 class="title">Influenza Clade Explorer</h1>
+<h1 class="title">(alpha) Influenza Clade Explorer</h1>
 <p class="author">Elgin Akin</p>
 
 </header>
@@ -45,11 +45,21 @@ ul.task-list li input[type="checkbox"] {
 <div class="sidebar">
 <section id="influenza-clade-nomenclature-explorer" class="sidebar-header">
 <h2>Influenza Clade Nomenclature Explorer</h2>
-<ul>
-<li>Author: <a href="https://elginakin.github.io">Elgin Akin</a></li>
-<li>Data Source: <a href="https://github.com/influenza-clade-nomenclature">Influenza Clade Nomenclature</a> Currently Only HA Subclade Nomenclature is supported.</li>
-</ul>
+<p><span class="alpha-badge">ALPHA</span></p>
+<p><strong>Author:</strong> <a href="https://elginakin.github.io">Elgin Akin</a></p>
+<p><strong>Data Source:</strong> <a href="https://github.com/influenza-clade-nomenclature">Influenza Clade Nomenclature</a></p>
+<div class="info-note">
+<p>Currently only HA subclade nomenclature is supported.</p>
+</div>
 </section>
+<div class="help-section">
+<button id="help-button" class="help-button-sidebar">
+<svg width="16" height="16" viewbox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="12" cy="12" r="10"></circle> <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path> <line x1="12" y1="17" x2="12.01" y2="17"></line>
+</svg>
+Help &amp; Instructions
+</button>
+</div>
 <section id="lineage" class="sidebar-section">
 <h3>Lineage</h3>
 <p><select id="lineage-select" class="form-control"> <option value="H3N2">H3N2</option> <option value="H1N1">H1N1pdm</option> <option value="Victoria">B/Victoria</option> </select></p>
@@ -69,6 +79,20 @@ ul.task-list li input[type="checkbox"] {
 <h3>Display Options</h3>
 <p><label class="checkbox-label"> <input type="checkbox" id="show-labels" checked=""> Show labels </label> <label class="checkbox-label"> <input type="checkbox" id="show-legend"> Show color legend </label> <label class="checkbox-label"> <input type="checkbox" id="show-table"> Show data table </label></p>
 </section>
+<section id="appearance" class="sidebar-section">
+<h3>Appearance</h3>
+<p><label> Label Size: <span id="label-size-value" class="slider-value">11px</span> </label> <input type="range" id="label-size" min="8" max="30" value="11" step="1"></p>
+<p><label style="margin-top: 8px; display: block;"> Edge Length: <span id="edge-length-value" class="slider-value">80px</span> </label> <input type="range" id="edge-length" min="40" max="150" value="80" step="5"></p>
+<p><label style="margin-top: 8px; display: block;"> Vertical Spacing: <span id="vertical-spacing-value" class="slider-value">20px</span> </label> <input type="range" id="vertical-spacing" min="12" max="150" value="20" step="1"></p>
+<p><label style="margin-top: 8px; display: block;"> Node Size: <span id="node-size-value" class="slider-value">5px</span> </label> <input type="range" id="node-size" min="3" max="20" value="5" step="1"></p>
+<p><label style="margin-top: 8px; display: block;"> Mutation Font: <span id="mutation-font-value" class="slider-value">7px</span> </label> <input type="range" id="mutation-font" min="5" max="30" value="7" step="0.5"></p>
+</section>
+<section id="selection" class="sidebar-section">
+<h3>Selection</h3>
+<button id="clear-selection" class="btn-clear" disabled="">
+Clear Selection
+</button>
+</section>
 <div class="sidebar-section">
 <div id="stats-box" class="stats-box">
 <p><span id="node-count">Loading…</span></p>
@@ -78,6 +102,7 @@ ul.task-list li input[type="checkbox"] {
 </button>
 </div>
 </div>
+<!-- END .sidebar -->
 <div class="main-content">
 <section id="influenza-h3n2-clade-hierarchy" class="main-header">
 <h1><span id="main-title">Influenza H3N2 Clade Hierarchy</span></h1>
@@ -100,6 +125,7 @@ Loading clade data…
 </svg>
 </div>
 </div>
+<!-- END .viz-panel -->
 <div id="inspector-panel" class="inspector-panel">
 <section id="clade-inspector" class="inspector-header">
 <h3>🔍 Clade Inspector</h3>
@@ -109,10 +135,15 @@ Loading clade data…
 <p>
 Click on a clade node to view details
 </p>
+<p class="hint">
+Hold Ctrl/Cmd to select multiple clades
+</p>
 </div>
 </div>
 </div>
+<!-- END .inspector-panel -->
 </div>
+<!-- END .content-area -->
 <div id="table-panel" class="table-panel">
 <div class="table-header">
 <h3>
@@ -151,13 +182,76 @@ Defining Mutations
 </table>
 </div>
 </div>
+<!-- END .table-panel -->
 </div>
+<!-- END .main-content -->
 </div>
+<!-- END .app-container -->
+<div id="help-overlay" class="help-overlay">
+  <div class="help-modal">
+    <button id="close-help" class="close-help">×</button>
+    
+    <div class="help-content">
+      <h2>Data</h2>
+      <div class="help-section info-box">
+        <h3>📊 Data Source</h3>
+        <p>This tool visualizes influenza clade nomenclature from the <a href="https://github.com/influenza-clade-nomenclature" target="_blank">Influenza Clade Nomenclature</a> GitHub repository.</p>
+        <p><strong>Current Status:</strong> Only HA subclade nomenclature is supported (H3N2, H1N1pdm, B/Victoria).</p>
+        <p><strong>Updates:</strong> Data is fetched from GitHub on each session. Use the "Refresh Data" button to get the latest nomenclature.</p>
+      </div>
+
+    <div class="help-content">
+      <h2>How to Use</h2>
+      
+      <div class="help-section">
+        <h3>Navigation</h3>
+        <ul>
+          <li><strong>Click nodes</strong> to view clade details in the inspector panel</li>
+          <li><strong>Ctrl/Cmd + Click</strong> to select multiple clades</li>
+          <li><strong>Scroll or drag</strong> to pan around the tree</li>
+          <li><strong>Scroll wheel</strong> to zoom in/out</li>
+        </ul>
+      </div>
+      
+      <div class="help-section">
+        <h3>Customization</h3>
+        <ul>
+          <li><strong>Label Size:</strong> Adjust text size for clade names</li>
+          <li><strong>Edge Length:</strong> Control horizontal spacing between nodes</li>
+          <li><strong>Vertical Spacing:</strong> Adjust spacing between clades (increase to prevent overlap)</li>
+          <li><strong>Mutation Font:</strong> Change size of mutation labels on edges</li>
+        </ul>
+      </div>
+      
+      <div class="help-section">
+        <h3>Search &amp; Filter</h3>
+        <ul>
+          <li><strong>Search:</strong> Type a clade name (e.g., "C.3") to highlight it</li>
+          <li><strong>Filter:</strong> Show only descendants of a specific clade</li>
+          <li><strong>Table:</strong> Enable to see sortable, filterable data</li>
+        </ul>
+      </div>
+      
+
+      
+      <div class="help-section">
+        <h3>💡 Tips</h3>
+        <ul>
+          <li>Increase <strong>Vertical Spacing</strong> to 40-50px if mutation labels overlap</li>
+          <li>Use the <strong>Clear Selection</strong> button to deselect all nodes</li>
+          <li>Download the data table as CSV for further analysis</li>
+          <li>The color legend shows major clade groups</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
 <div id="tooltip" class="tooltip">
 
 </div>
 <div class="app-footer">
-<p>Influenza Clade Nomenclature is sourced from the <a href="https://github.com/influenza-clade-nomenclature">Influenza Clade Nomenclature</a> Github Repository| Built with Quarto &amp; D3.js</p>
+<p><span class="version-badge">v1.0.0</span> | Clade assignments sourced from the <a href="https://github.com/influenza-clade-nomenclature">Influenza Clade Nomenclature</a> Github Repository | Built with Quarto &amp; D3.js</p>
 </div>
 <script type="module" src="clade-tree.js"></script>
 
@@ -166,4 +260,4 @@ Defining Mutations
 
 
 
-</body></html>
+</div></body></html>
