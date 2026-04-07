@@ -1128,22 +1128,73 @@ function render() {
     .style('opacity', uiState.showMutations ? 1 : 0);
 
   // Draw nodes with transition
-  const nodeGroups = elements.g.selectAll('.node')
-    .data(descendants)
-    .enter()
-    .append('g')
-    .attr('class', d => {
-      let classes = 'node';
-      if (state.searchMatches.has(d.data.id)) classes += ' highlighted';
-      if (state.selectedNodes.has(d.data.id)) classes += ' selected';
-      return classes;
-    })
-    .attr('transform', d => `translate(${d.y},${d.x})`)
-    .attr('opacity', 0)
-    .on('mouseover', showTooltip)
-    .on('mousemove', moveTooltip)
-    .on('mouseout', hideTooltip)
-    .on('click', handleNodeClick);
+const nodeGroups = elements.g.selectAll('.node')
+  .data(descendants)
+  .enter()
+  .append('g')
+  .attr('class', d => {
+    let classes = 'node';
+    if (state.searchMatches.has(d.data.id)) classes += ' highlighted';
+    if (state.selectedNodes.has(d.data.id)) classes += ' selected';
+    return classes;
+  })
+  .attr('transform', d => `translate(${d.y},${d.x})`)
+  .attr('opacity', 0)
+  .on('mouseover', function(event, d) {
+    const tooltip = d3.select('#tooltip');
+    
+    let html = `<div class="tooltip-title" style="border-left: 3px solid ${d.data.color || '#999'}; padding-left: 8px;">${d.data.id}</div>`;
+    
+    if (d.data.parent) {
+      html += `<div class="tooltip-row"><span class="tooltip-label">Parent:</span> ${d.data.parent}</div>`;
+    }
+    
+    if (d.data.alias) {
+      html += `<div class="tooltip-row"><span class="tooltip-label">Full name:</span> ${d.data.alias}</div>`;
+    }
+    
+    if (d.data.mutations && d.data.mutations.length > 0) {
+      html += `<div class="tooltip-mutations"><strong>Mutations:</strong><br>`;
+      d.data.mutations.slice(0, 4).forEach(mut => {
+        const locus = mut.locus || 'nuc';
+        const pos = mut.position || '?';
+        const state = mut.state || '?';
+        html += `<span class="mutation-tag">${locus}:${pos}${state}</span>`;
+      });
+      if (d.data.mutations.length > 4) {
+        html += `<br><em>+${d.data.mutations.length - 4} more</em>`;
+      }
+      html += `</div>`;
+    }
+    
+    tooltip
+      .html(html)
+      .classed('visible', true)
+      .style('left', (event.pageX + 10) + 'px')
+      .style('top', (event.pageY - 10) + 'px');
+  })
+  .on('mousemove', function(event) {
+    const tooltipNode = d3.select('#tooltip').node();
+    const tooltipRect = tooltipNode.getBoundingClientRect();
+    
+    let left = event.pageX + 10;
+    let top = event.pageY - 10;
+    
+    if (left + tooltipRect.width > window.innerWidth - 20) {
+      left = event.pageX - tooltipRect.width - 10;
+    }
+    if (top + tooltipRect.height > window.innerHeight - 20) {
+      top = event.pageY - tooltipRect.height - 10;
+    }
+    
+    d3.select('#tooltip')
+      .style('left', left + 'px')
+      .style('top', top + 'px');
+  })
+  .on('mouseout', function() {
+    d3.select('#tooltip').classed('visible', false);
+  })
+  .on('click', handleNodeClick);
 
   nodeGroups.transition()
     .duration(400)
@@ -1160,33 +1211,16 @@ function render() {
     .duration(400)
     .attr('r', d => state.searchMatches.has(d.data.id) ? nodeSize + 2 : nodeSize);
 
-  nodeGroups.append('text')
-    .attr('dx', nodeSize + 4)
-    .attr('dy', 3)
-    .text(d => d.data.id)
-    .each(function(d) {
-      const textNode = this;
-      const bbox = textNode.getBBox();
-      
-      const parent = textNode.parentNode;
-      const bgRect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-      
-      bgRect.setAttribute('x', bbox.x - 2);
-      bgRect.setAttribute('y', bbox.y - 1);
-      bgRect.setAttribute('width', bbox.width + 4);
-      bgRect.setAttribute('height', bbox.height + 2);
-      bgRect.setAttribute('fill', 'rgba(255, 255, 255, 0.85)');
-      bgRect.setAttribute('rx', 2);
-      bgRect.setAttribute('class', 'label-background');
-      
-      parent.insertBefore(bgRect, textNode);
-    })
-    .style('font-size', state.settings.labelSize + 'px')
-    .style('display', state.showLabels ? 'block' : 'none')
-    .attr('opacity', 0)
-    .transition()
-    .duration(400)
-    .attr('opacity', state.showLabels ? 1 : 0);
+nodeGroups.append('text')
+  .attr('dx', nodeSize + 4)
+  .attr('dy', 3)
+  .text(d => d.data.id)
+  .style('font-size', state.settings.labelSize + 'px')
+  .style('display', state.showLabels ? 'block' : 'none')
+  .attr('opacity', 0)
+  .transition()
+  .duration(400)
+  .attr('opacity', state.showLabels ? 1 : 0);
 
   centerView(root, width, height, hierarchyData.isVirtualRoot);
 }
